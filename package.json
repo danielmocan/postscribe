@@ -28,7 +28,7 @@
   "main": "dist/postscribe.js",
   "browser": "dist/postscribe.js",
   "dependencies": {
-    "prescribe": ">=1.1.2"
+    "prescribe": "https://github.com/ancutac/prescribe.git"
   },
   "devDependencies": {
     "babel-core": "6.20.0",
