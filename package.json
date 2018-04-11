@@ -28,7 +28,7 @@
   "main": "dist/postscribe.js",
   "browser": "dist/postscribe.js",
   "dependencies": {
-    "prescribe": "https://github.com/ancutac/prescribe.git"
+    "prescribe": "https://github.com/ancutac/prescribe/tarball/remove-mediadata-changes"
   },
   "devDependencies": {
     "babel-core": "6.20.0",
