@@ -1,7 +1,7 @@
 /**
  * @file postscribe
  * @description Asynchronously write javascript, even with document.write.
- * @version vundefined
+ * @version v1.0.1
  * @see {@link https://krux.github.io/postscribe}
  * @license MIT
  * @author Derek Brans
@@ -998,11 +998,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @file prescribe
 	 * @description Tiny, forgiving HTML parser
-	 * @version v1.1.3
+	 * @version v1.0.1
 	 * @see {@link https://github.com/krux/prescribe/}
 	 * @license MIT
 	 * @author Derek Brans
-	 * @copyright 2017 Krux Digital, Inc
+	 * @copyright 2018 Krux Digital, Inc
 	 */
 	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
@@ -1212,7 +1212,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		      if (detect.hasOwnProperty(type)) {
 		        if (detect[type].test(this.stream)) {
 		          var token = streamReaders[type](this.stream);
-	
 		          if (token) {
 		            if (token.type === 'startTag' && /script|style/i.test(token.tagName)) {
 		              return null;
@@ -1389,9 +1388,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		 * @returns {CommentToken}
 		 */
 		function comment(stream) {
-		  var index = stream.indexOf('-->');
+		  var endNeedle = '-->';
+		  var index = stream.indexOf(endNeedle);
+		  var startIndex = String('<!--').length;
+		  var endIndex = index + endNeedle.length;
 		  if (index >= 0) {
-		    return new _tokens.CommentToken(stream.substr(4, index - 1), index + 3);
+		    return new _tokens.CommentToken(stream.substring(startIndex, endIndex), endIndex);
 		  }
 		}
 	
@@ -1452,10 +1454,18 @@ return /******/ (function(modules) { // webpackBootstrap
 		    // for optimization, we check first just for the end tag
 		    if (rest.match(new RegExp('<\/\\s*' + start.tagName + '\\s*>', 'i'))) {
 		      // capturing the content is inefficient, so we do it inside the if
-		      var match = rest.match(new RegExp('([\\s\\S]*?)<\/\\s*' + start.tagName + '\\s*>', 'i'));
+		      var match = rest.match(new RegExp('([\\s\\S]*?)<\/\\s*' + start.tagName + '\\s*>', 'i')); // CLEANUP 1
 		      if (match) {
 		        return new _tokens.AtomicTagToken(start.tagName, match[0].length + start.length, start.attrs, start.booleanAttrs, match[1]);
 		      }
+		    } else if (rest.match(new RegExp('[\\s\\S]*?<', 'i'))) {
+		      // capturing the content is inefficient, so we do it inside the if
+		      var _match = rest.match(new RegExp('([\\s\\S]*?)<', 'i')); // CLEANUP 1
+		      if (_match) {
+		        return new _tokens.AtomicTagToken(start.tagName, _match[0].length + start.length - 1, start.attrs, start.booleanAttrs, _match[1]);
+		      }
+		    } else {
+		      return new _tokens.AtomicTagToken(start.tagName, rest.length + start.length, start.attrs, start.booleanAttrs, rest);
 		    }
 		  }
 		}
@@ -1756,6 +1766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 		  // There's no lookback in JS, so /(^|[^\\])"/ only matches the first of two `"`s.
 		  // Instead, just match anything before a double-quote and escape if it's not already escaped.
+	
 		  return !value ? defaultValue : value.replace(/([^"]*)"/g, function (_, prefix) {
 		    return (/\\/.test(prefix) ? prefix + '"' : prefix + '\\"'
 		    );
