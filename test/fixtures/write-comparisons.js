@@ -19,12 +19,12 @@ export default {
       new Html('A<script src="remote/write-remote-and-inline-script.js">', '</script>B'),
       new Uri('remote/write-remote-and-inline-script.js')
     ],
-    'docwrite outside parent of script': new Html(`<div>A<script type="text/javascript">document.write("B</div>C");<\/script>D`),
+    'docwrite outside parent of script': new Html('<div>A<script type="text/javascript">document.write("B</div>C");<\/script>D'),
     'capital script': new Html('A<SCRIPT type="text/javascript">document.write("B");</SCRIPT>C'),
     'different case script': new Html('A<SCRIPT type="text/javascript">document.write("B");</script>C'),
     'capital script@SRC': new Html('<SCRIPT TYPE="text/javascript" SRC="remote/write-div.js"></SCRIPT>'),
     'inline': new Html('A<script type="text/javascript">document.write("B");</script>C'),
-    'nested document.write': `A<script type="text/javascript">document.write("B<script type='text/javascript'>document.write('C');<\\/script>D");</script>E`,
+    'nested document.write': 'A<script type="text/javascript">document.write("B<script type=\'text/javascript\'>document.write(\'C\');<\\/script>D");</script>E',
     'globals': '<script>var XQWER = "foo";<\/script><script>document.write("" + window.XQWER + (this === window));<\/script>',
     'skip:partial script': [
       new Html('<script>var QWVES = 1'),
@@ -106,9 +106,9 @@ export default {
   'complete node after several writes': {
     'writes JS inside tag': '<script src="remote/write-multi-script.js"><\/script>',
     'writes CSS inside tag': '<script src="remote/write-multi-style.js"><\/script>',
-    'writes textarea inside tag': '<script src="remote/write-multi-style.js"><\/script>',
-    'writes iframe inside tag': '<script src="remote/write-multi-style.js"><\/script>',
-    'writes noscript inside tag': '<script src="remote/write-multi-style.js"><\/script>',
+    'writes textarea inside tag': '<script src="remote/write-multi-textarea.js"><\/script>',
+    'writes iframe inside tag': '<script src="remote/write-multi-iframe.js"><\/script>',
+    'writes noscript inside tag': '<script src="remote/write-multi-noscript.js"><\/script>',
     'writes text inside tag': '<script src="remote/write-multi-div.js"><\/script>'
   },
   'nesting scripts': {
