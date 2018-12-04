@@ -158,13 +158,7 @@ export default function postscribe(el, html, options) {
   }
 
   options = utils.defaults(options, OPTIONS);
-
-  // id selector
-  if ((/^#/).test(el)) {
-    el = window.document.getElementById(el.substr(1));
-  } else {
-    el = el.jquery ? el[0] : el;
-  }
+  el = window.document.getElementById(el.substr(1)); // we always send an ID selector
 
   const args = [el, html, options];
 
